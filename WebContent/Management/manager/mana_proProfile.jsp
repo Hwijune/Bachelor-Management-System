@@ -1,0 +1,421 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+   pageEncoding="EUC-KR"%>
+<%@ page import="java.sql.*"%>
+<%@ page import="java.net.URLEncoder"%>
+<%
+   request.setCharacterEncoding("euc-kr");
+%>
+<%
+   //id°ª°ú pw°ª °¡Á®¿À±â
+
+   int id = Integer.parseInt(request.getParameter("id"));
+   String pw = request.getParameter("pw");
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%
+   Connection conn = null;
+
+   PreparedStatement pstmt = null;
+   ResultSet rs1 = null;
+   ResultSet rs2 = null;
+   ResultSet rs3 = null;
+
+   String name = request.getParameter("name");
+   if (name == null) {
+      name = "A";
+   }
+
+   try {
+      String jdbcUrl = "jdbc:mysql://localhost:3306/mydb";
+      String jdbcId = "root";
+      String jdbcPw = "rootpass";
+      Class.forName("com.mysql.jdbc.Driver");
+      conn = DriverManager.getConnection(jdbcUrl, jdbcId, jdbcPw);
+
+      String Query2 = "SELECT * from professor Where nameProf=?";
+      pstmt = conn.prepareStatement(Query2);
+      pstmt.setString(1, name);
+      rs2 = pstmt.executeQuery();
+
+      String Query1 = "SELECT distinct majorProf FROM Professor";
+      pstmt = conn.prepareStatement(Query1);
+      rs1 = pstmt.executeQuery();
+
+      String Query3 = "SELECT distinct nameProf FROM Professor";
+      pstmt = conn.prepareStatement(Query3);
+      rs3 = pstmt.executeQuery();
+
+      String nameprof = "";
+      String sidprof = "";
+      int idprof = 0;
+      String phoneprof = "";
+      String majorprof = "";
+      String addprof = "";
+
+      if (rs2.next()) {
+
+         nameprof = rs2.getString("nameProf");
+         sidprof = rs2.getString("sidProf");
+         idprof = rs2.getInt("idProf");
+         phoneprof = rs2.getString("phoneProf");
+         majorprof = rs2.getString("majorProf");
+         addprof = rs2.getString("addProf");
+      }
+%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<script type="text/javascript">
+   var A;
+   var B;
+   var C;
+   var D;
+   function change() {
+      A = document.getElementById("major");
+      B = A.options[A.selectedIndex].value;
+
+      C = document.getElementById("name");
+      D = C.options[C.selectedIndex].value;
+   }
+
+   function search(form) {
+      form.action = "mana_proProfile.jsp?id="+<%=id%>+"&major=" + B + "&name=" + D;
+      form.submit();
+   }
+   
+</script>
+<title>Insert title here</title>
+</head>
+<style>
+#wapper {
+   left: 10px;
+   top: 10px;
+   border: 1px solid;
+   padding: 5px;
+}
+
+#banner {
+   left: 10px;
+}
+
+#navi {
+   position: absolute;
+   width: 250px;
+   height: 90%;
+}
+
+#contents {
+   
+   padding: 10px;
+   position: absolute;
+   left: 290px;
+   width: 76%;
+   height: 78%;
+   overflow: scroll;
+}
+
+#footer {
+   padding: 18px;
+   position: absolute;
+   left: -18px;
+   top: 90%;
+   width: 100%;
+   overflow: auto;
+}
+table {
+    width: 100%;
+    
+  }
+  .in {
+      width: 50%;
+         padding: 10px 20px;
+         margin: 5px 0;
+         box-sizing: border-box;
+         border: solid 2px #9B8281;
+         border-radius: 8px;
+         
+      }
+      [class*='btn-'] {
+   border-radius: 7px; <%-- Å×µÎ¸® --%>
+   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+   -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+   color: #fff;
+   display: inline-block;
+   font-family: Arial, Helvetica, sans-serif;
+   font-size: 14px;
+   margin: 0px 7px 0px 0px; <%-- À§ ¿À¸¥ÂÊ ¾Æ·¡ ¿ÞÂÊ --%>
+   padding: 5px 10px; <%-- ÀüÃ¼ ³ÐÀÌ --%>
+   text-decoration: none;
+   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+   
+   -webkit-transition: background-color 0.1s linear;
+   -moz-transition: background-color 0.1s linear;
+   -o-transition: background-color 0.1s linear;
+     transition: background-color 0.1s linear;   
+}
+   [class*='btn-']:hover {
+      cursor: pointer;
+   }
+
+   .btn-red1 {
+      background-color: rgb( 255, 85, 113 );
+      border: 1px solid rgb( 255, 255, 255 );
+   }
+   
+      .btn-red1:hover {
+         background-color: rgb( 231, 159, 170 );
+      }
+      
+      .btn-red1:active {
+         background-color: rgb( 255, 224, 229 );
+      }
+      
+      .mainselection {
+   overflow:hidden;
+   width:100px;
+   -moz-border-radius: 9px 9px 9px 9px;
+   -webkit-border-radius: 9px 9px 9px 9px;
+   border-radius: 9px 9px 9px 9px;
+   box-shadow: 1px 1px 11px #330033;
+   background: white url("http://i62.tinypic.com/15xvbd5.png") no-repeat scroll 69px center;
+   
+    border: 0;
+   color: black;
+   background: transparent;
+   font-size: 14px;
+   font-weight: bold;
+   padding: 2px 10px;
+   width: 128px;
+   *width: 100px;
+   *background: white;
+   
+}
+   div.fixed {
+         border: 2px solid white;
+         width: 98%;
+         position: fixed;
+         top: 100px;
+         right: 0;
+         }
+         
+         .button {
+  background-color: #f2f2f2;
+  background-image: linear-gradient(to bottom, #f2f2f2, #f2f2f2);
+  border: 1px solid #bfbfbf;
+  box-shadow: inset 0 1px 0 white, inset 0 -1px 0 #d9d9d9, inset 0 0 0 1px #f2f2f2, 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #505050;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  transition: all 20ms ease-out;
+  vertical-align: top;
+  width:55px;
+  height:35px;
+}
+.button:hover, .button:focus {
+  background: #f2f2f2;
+  border-color: #8c8c8c;
+  box-shadow: inset 0 1px 0 white, inset 0 -1px 0 #d9d9d9, inset 0 0 0 1px #f2f2f2;
+}
+.button:active {
+  background: #f2f2f2;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+.button .fa {
+  color: #bfbfbf;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+
+
+.button .fa {
+  float: left;
+  font-size: 14px;
+  line-height: 20px;
+  margin: -1px 8px 0 -4px;
+  vertical-align: top;
+}
+
+.but {
+  background-color: #f2f2f2;
+  background-image: linear-gradient(to bottom, #f2f2f2, #f2f2f2);
+  border: 1px solid #bfbfbf;
+  box-shadow: inset 0 1px 0 white, inset 0 -1px 0 #d9d9d9, inset 0 0 0 1px #f2f2f2, 0 2px 4px rgba(0, 0, 0, 0.2);
+  color: #505050;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-radius: 3px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15px;
+  transition: all 20ms ease-out;
+  vertical-align: top;
+  width:63px;
+  height:28px;
+}
+.but:hover, .but:focus {
+  background: #f2f2f2;
+  border-color: #8c8c8c;
+  box-shadow: inset 0 1px 0 white, inset 0 -1px 0 #d9d9d9, inset 0 0 0 1px #f2f2f2;
+}
+.but:active {
+  background: #f2f2f2;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+.but .fa {
+  color: #bfbfbf;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+
+
+.but .fa {
+  float: left;
+  font-size: 14px;
+  line-height: 20px;
+  margin: -1px 8px 0 -4px;
+  vertical-align: top;
+}
+</style>
+<body>
+   <%
+      String q = request.getParameter("major");
+   %>
+   <div id="wrapper">
+      <div id="banner">
+         <jsp:include page="../member/Banner.jsp" flush="false">
+         <jsp:param name="id" value="<%=id%>" />
+            <jsp:param name="pw" value="<%=pw%>" />
+         </jsp:include>
+      </div>
+      <br>
+      <div id="navi">
+         <jsp:include page="../member/mana_navi.jsp" flush="false">
+         <jsp:param name="id" value="<%=id%>" />
+         <jsp:param name="pw" value="<%=pw%>" />
+         </jsp:include>
+      </div>
+      <div id="contents">
+         <form name="Fuck" method=post>
+            <center>&nbsp;<B><font face="¸¼Àº °íµñ">ÇÐ°ú &nbsp;&nbsp;</font></B><SELECT id="major" name="major" SIZE="1" onChange="change()" CLASS="mainselection">
+               <OPTION value=""></OPTION>
+               <%
+                  while (rs1.next())
+                     {
+               %>
+               <OPTION value=<%=rs1.getString("majorProf")%>><%=rs1.getString("majorProf")%></OPTION>
+               <%
+                  }
+               %>
+            </SELECT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <B><font face="¸¼Àº °íµñ"> ±³¼ö¸í &nbsp;&nbsp; </font></B> <SELECT id="name" name="name" SIZE="1" onChange="change()" CLASS="mainselection">
+               <OPTION value=""></OPTION>
+               <%
+                  while (rs3.next())
+                     {
+                     String nameProf = rs3.getString("nameProf");
+                     String encode_nameProf = URLEncoder.encode(nameProf, "euc-kr");
+               %>
+               <OPTION value="<%=encode_nameProf%>"><%=nameProf%></OPTION>
+               <%
+                  }
+               %>
+            </SELECT>&nbsp;&nbsp;&nbsp;&nbsp;<INPUT TYPE="button" VALUE="°Ë»ö" CLASS="button" onClick="javascript:search(Fuck)">
+         </form>
+         <form name="mana_proProfile" METHOD=POST
+            ACTION="mana_proProfile_Proc.jsp?id=<%=id%>&pw=<%=pw%>">
+            
+            <br><br><B><font face="¸¼Àº °íµñ"> ±³¼ö½Å»ó µî·Ï ¹× Á¤Á¤ </font></B>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;
+            <INPUT type=SUBMIT VALUE="µî·Ï" style = "text-align:right;" class="btn-red1"> 
+            <INPUT type=BUTTON VALUE="Á¤Á¤" style = "text-align:right;" class="btn-red1" a href="#">
+            <HR COLOR="#df314d" size="3"></HR>
+              <BR><br>
+            <TABLE>
+
+               <TR align=center>
+                  <TD>&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">¼º     ¸í </font></b> &nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="name" Value="<%=nameprof%>" placeholder="¿¹)È«±æµ¿" class="in"></td>
+                  <td>&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">ÁÖ¹Î¹øÈ£</font></b>&nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="sidprof" Value="<%=sidprof%>" placeholder="¿¹)9401261000000" class="in"></TD>
+               </TR>
+
+               <TR align=center>
+                  <TD>&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">±³     ¹ø</font></b> &nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="idprof" Value="<%=idprof%>" placeholder="¿¹)1344011" class="in"></td>
+                  <td>&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">ÀüÈ­¹øÈ£</font></b> &nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="phone" value="<%=phoneprof%>" placeholder="¿¹)01020048497" class="in"></TD>
+               </TR>
+
+               <TR align=center>
+                  <TD>&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">ÇÐ     °ú</font></b> &nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="major" value="<%=majorprof%>" placeholder="¿¹)¼ÒÇÁÆ®¿þ¾îÇÐ°ú" class="in"></TD>
+                  <TD>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><font face="¸¼Àº °íµñ">ÁÖ     ¼Ò</font></b> &nbsp;&nbsp;&nbsp;
+                  <INPUT TYPE="text" NAME="add" value="<%=addprof%>" placeholder="¿¹)ÃæºÏ Ã»ÁÖ½Ã" class="in"></TD>
+               </TR>
+
+
+            </TABLE>
+         </form>
+         <BR><B><font face="¸¼Àº °íµñ"> ±âÅ¸Á¤º¸ </font></B><BR>
+
+         <TABLE>
+
+            <TR>
+               <TD>&nbsp; <INPUT TYPE="text" NAME="&nbsp;" class="in"></TD>
+            </TR>
+
+
+            <TR>
+               <TD>&nbsp; <INPUT TYPE="text" NAME="&nbsp;" class="in"></TD>
+            </TR>
+
+            <TR>
+               <TD>&nbsp; <INPUT TYPE="text" NAME="&nbsp;" class="in"></TD>
+            </TR>
+
+         </TABLE>
+
+      </div>
+      <div id="footer">
+         <jsp:include page="../member/footer.jsp" flush="false"></jsp:include>
+      </div>
+   </div>
+   <%
+      } catch (SQLException e)
+      {
+         e.printStackTrace();
+      } finally
+      {
+         rs2.close();
+         rs1.close();
+         rs3.close();
+         pstmt.close();
+         conn.close();
+      }
+   %>
+
+</body>
+</html>
