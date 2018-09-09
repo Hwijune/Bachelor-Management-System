@@ -1,7 +1,9 @@
 # Bachelor-Management-System
 Bachelor Management System-JSP
 
-main function
+if you want detail imformation, read report
+
+Main function
 
 - Personal information system
 - Graduates have a diagnostic system
